@@ -30,9 +30,15 @@ public:
 
 	class Iterator
 	{
-		//reprezentacja iteratora?
+		Node<T>* pointer;
+		vector<bool> visited;
+		bool cycle;
 
-		//tutaj wsadü dfs
+		Iterator()		//konstruktor
+		{
+			cycle = false;
+		}
+
 
 		bool operator!=(Iterator it)
 		{
@@ -43,17 +49,59 @@ public:
 		{
 			//przechodzenie po wektorze
 		}
+
+		void unvisit()
+		{
+			for(vector<bool>::iterator it = visited.begin(); it != visited.end(); ++it)
+			{
+				*it = false;
+			}
+		}
+
+		void detectCycle()
+		{
+			unvisit();
+			for(int i = 0; i < graf.size(); ++i)
+			{
+				//visited[i] = true;
+				detectCycle(i,i);
+			}
+		}
+
+		void detectCycle(int n, int origin)
+		{
+			for(int i = 0; i < graf.size(); ++i)
+			{
+				if(i == n)
+					cycle = true;
+				else if( !visited[i] )
+				{
+					visited[i] = true;
+					detectCycle(i, n);
+					visited[i] = false;
+				}
+			}
+		}
+
 	};
 
-	/*Graph<T>::Iterator begin()
+	Iterator begin()
+	{
+		Iterator Result;
+		Result.detectCycle();
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		try
+		{
+			if(Result.cycle)
+				throw cyclicgraphexception;
+		}
+		catch(exception& e)
+	}
+
+	Iterator end()
 	{
 
 	}
-
-	Graph<T>::Iterator end()
-	{
-
-	}*/
 
 
 
