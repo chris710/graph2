@@ -10,9 +10,15 @@ int main()
 	Node<int> c = g.addNode(44);
 	g.addArc(a,b);
 	g.addArc(b,c);
+	g.addArc(c,a);
 	g.printMatrix();
+	Graph<int>::Iterator it = g.begin();
+	//for (it = g.begin(); it != g.end(); it++) {
+	 x = *it;
+	
 
-	cout<<*a<<endl;
+
+	cout<<g.currentId<<endl;
 	cin>>x;
 	return 1;
 }

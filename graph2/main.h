@@ -4,6 +4,7 @@
 #include<iostream>
 #include "graph.h"
 #include "node.h"
+#include "exception.h"
 
 using namespace std;
 

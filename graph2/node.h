@@ -19,6 +19,20 @@ public:
 	{
 		return *pointer;
 	}
+
+	Node<T>* operator++()
+	{
+		return this;
+	}
+
+	T* operator->() const 
+	{
+		return &**pointer;
+	}
+	
+	/*Node<T>* operator() const {
+		return &**this;
+	}*/
 };
 
 #endif	//NODE_H
