@@ -11,8 +11,14 @@ public:
 	Node(int i)
 	{
 		id = i;
-		T* tmp = new T;
-		this->pointer = tmp;
+		pointer = new T;
+	}
+
+	Node(int i, T tmp)
+	{
+		id = i;
+		//pointer = new T;
+		this->pointer = &tmp;
 	}
 
 	T& operator*()

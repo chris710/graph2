@@ -38,20 +38,17 @@ public:
 			int id;							//numer w wektorze
 			vector<bool> visited;			//tablica odwiedzonych wierzcho³ków
 			bool cycle;						//flaga cyklu
-			bool end;						//flaga ostatniego iteratora
 
 			Iterator(Graph<T>* g)		//konstruktor
 			{
 				parent = g;
 				cycle = false;
-				end = false;
 			}
 
 
 			bool operator!=(Iterator it)
 			{
-				if(end != it.end) return true;
-				if(pointer->id == it.pointer->id)
+				if(id == it.id)
 					return false;
 				return true;
 			}
@@ -59,14 +56,15 @@ public:
 			void operator++()
 			{
 				this->id++;
-				if(id != sorted.size())
+				if(this->id != parent->sorted.size())
 					this->pointer = (parent->sorted[id]);
 			}
 
 			void operator++(int)
 			{
 				this->id++;
-				this->pointer = (parent->sorted[id]);
+				if(this->id != parent->sorted.size())
+					this->pointer = (parent->sorted[id]);
 			}
 
 			void unvisit()
@@ -114,6 +112,7 @@ public:
 			void sortDFS()
 			{
 				unvisit();
+				parent->sorted.clear();
 				for(int i = 0; i < parent->graf.size(); ++i)
 				{
 					if(!visited[i])
@@ -163,30 +162,20 @@ public:
 	Iterator end()
 	{
 		Iterator Result(this);
-		Result.detectCycle();
-		Cyclicgraphexception cyclicgraphexception;
-		try
-		{
-			if(Result.cycle)
-				throw cyclicgraphexception;
-			Result.end = true;
-			Result.id = sorted.size();
-			return Result;
-		}
-		catch(exception& e)
-		{
-			cout<<e.what()<<endl;
-			return NULL;
-		}
+		Result.id = sorted.size();
+		return Result;
 	}
 
 
 	Node< T> addNode()						//dodawanie nowego wierzcho³ka
 	{
-		Node<T> Result(currentId);
+		Node<T>* Result = new Node<T>(currentId);
+		wektor.push_back(Result);
+
 		//mapa.insert(Result);		// do dodawania do mapy
 
 		currentId ++;
+
 		vector<bool> nowy;
 		for(int i = 0; i < currentId; ++i)
 			nowy.push_back(false);
@@ -195,17 +184,20 @@ public:
 		{
 			graf[i].push_back(false);
 		}
-		wektor.push_back(++Result);
-		return Result;
+		
+		return *Result;
 	}
 
 	Node< T> addNode(T x)
 	{				//	ACHTUNG dubluje siê z powy¿szym
-		Node<T> Result(currentId);
-		*Result = x;
+		
+		Node<T>* Result = new Node<T>(currentId, x );
+		wektor.push_back(Result);
+
 		//mapa.insert(Result);		// do dodawania do mapy
 
 		currentId ++;
+
 		vector<bool> nowy;
 		for(int i = 0; i < currentId; ++i)
 			nowy.push_back(false);
@@ -214,9 +206,8 @@ public:
 		{
 			graf[i].push_back(false);
 		}
-		wektor.push_back(++Result);
 		
-		return Result;
+		return *Result;
 	}
 
 	void addArc(Node<T> a,Node<T> b)
