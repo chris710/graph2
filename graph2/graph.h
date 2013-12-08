@@ -38,16 +38,19 @@ public:
 			int id;							//numer w wektorze
 			vector<bool> visited;			//tablica odwiedzonych wierzcho³ków
 			bool cycle;						//flaga cyklu
+			bool end;						//flaga ostatniego iteratora
 
 			Iterator(Graph<T>* g)		//konstruktor
 			{
 				parent = g;
 				cycle = false;
+				end = false;
 			}
 
 
 			bool operator!=(Iterator it)
 			{
+				if(end != it.end) return true;
 				if(pointer->id == it.pointer->id)
 					return false;
 				return true;
@@ -56,13 +59,14 @@ public:
 			void operator++()
 			{
 				this->id++;
-				this->pointer = (sorted[id]);
+				if(id != sorted.size())
+					this->pointer = (parent->sorted[id]);
 			}
 
 			void operator++(int)
 			{
 				this->id++;
-				this->pointer = (sorted[id]);
+				this->pointer = (parent->sorted[id]);
 			}
 
 			void unvisit()
@@ -100,7 +104,7 @@ public:
 						else if( !visited[i] )
 						{
 							visited[i] = true;
-							detectCycle(i, n);
+							detectCycle(i, origin);
 							visited[i] = false;
 						}
 					}
@@ -165,14 +169,14 @@ public:
 		{
 			if(Result.cycle)
 				throw cyclicgraphexception;
-			Result.sortDFS();
-			Result.pointer = sorted.end();
+			Result.end = true;
 			Result.id = sorted.size();
 			return Result;
 		}
 		catch(exception& e)
 		{
 			cout<<e.what()<<endl;
+			return NULL;
 		}
 	}
 
@@ -195,11 +199,24 @@ public:
 		return Result;
 	}
 
-	Node< T> addNode(int x)
-	{
-		Node<T > tmp = addNode();
-		*tmp = x;
-		return tmp;
+	Node< T> addNode(T x)
+	{				//	ACHTUNG dubluje siê z powy¿szym
+		Node<T> Result(currentId);
+		*Result = x;
+		//mapa.insert(Result);		// do dodawania do mapy
+
+		currentId ++;
+		vector<bool> nowy;
+		for(int i = 0; i < currentId; ++i)
+			nowy.push_back(false);
+		graf.push_back(nowy);
+		for(int i = 0; i < graf.size()-1; ++i)
+		{
+			graf[i].push_back(false);
+		}
+		wektor.push_back(++Result);
+		
+		return Result;
 	}
 
 	void addArc(Node<T> a,Node<T> b)

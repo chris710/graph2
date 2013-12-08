@@ -27,7 +27,7 @@ public:
 
 	T* operator->() const 
 	{
-		return &**pointer;
+		return pointer;
 	}
 	
 	/*Node<T>* operator() const {
