@@ -15,6 +15,10 @@ public:
     {
         return "Graf zawiera cykl!!!";
     }
+	int kill()
+	{
+		exit(-1);
+	}
 };
 
 #endif // EXCEPTION_H

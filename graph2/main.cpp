@@ -6,34 +6,32 @@ int main()
 	Graph<string> g;
 	Node<string> n1 = g.addNode(), n2 = g.addNode(), n3 = g.addNode(), n4 = g.addNode();
 
-	*n1 = "Poznañ";
-	*n2 = "Berlin";
-	*n3 = "Pary¿";
-	*n4 = "Mozambik";
+	n1.setLabel("Poznan");
+	*g["Poznan"] = "Poznan";
+	n2.setLabel("Berlin");
+	*g["Berlin"] = "Berlin";
+	n3.setLabel("Paryz");
+	*g["Paryz"] = "Paryz";
+	n4.setLabel("Mozambik");
+	*g["Mozambik"] = "Mozambik";
 
 	g.addArc(n2,n1);
     g.addArc(n3,n2);
-	//g.addArc(n3,n4);		//ten ³uk tworzy cykl
+	g.addArc(n4,n3);
+	//g.addArc(n1,n4);	//ten ³uk tworzy cykl
 	g.printMatrix();
-	
-	/*for (int i = 0; i< g.wektor.size(); i++)
-	{
-		cout<<(**g.wektor[i])<<endl;
-	}*/
 
 	Graph<string>::Iterator it = g.begin();
-	for (it = g.begin(); 
-		it != g.end(); 
-		it++)
+	for (it = g.begin(); it != g.end();	it++)
 	{
 		cout<<*it<<endl;
 	}
-	
-	/*Node<int> ror = g.addNode();
-	*ror = 33;
-	cout<<*ror<<endl;*/
 
-	cout<<g.currentId<<endl;
+	if(g.containsPath(n4,n2))
+		cout<<"\nTen graf zawiera sciezke pomiedzy "<<*g["Mozambik"]<<" i "<<*n2<<endl;
+	
+
+	//cout<<g.currentId<<endl;
 	cin>>x;
 	return 1;
 }
